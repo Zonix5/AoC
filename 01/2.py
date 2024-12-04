@@ -4,7 +4,6 @@ nombre_final = 0
 
 # Separer les 2 nombres de la ligne
 def separe_nombre(nombres):
-    global liste_1, liste_2
     nombres = nombres.split()
     liste_1.append(nombres[0])
     liste_2.append(nombres[1])

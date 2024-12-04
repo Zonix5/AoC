@@ -1,6 +1,7 @@
 file_path = "input.txt"
 total = 0
 liste_levels = []
+difference_safe = {1, 2, 3}
 
 # Extraire le contenu du fichier
 with open(file_path, "r") as fichier:
@@ -14,19 +15,14 @@ with open(file_path, "r") as fichier:
 
 # Verifie si la liste est croissante
 def is_croissant(liste):
-	if sorted(liste) == liste:
-		return True
-	return False
+	return sorted(liste) == liste
 
 # Verifie si la liste est décroissante
 def is_decroissant(liste):
-	if sorted(liste, reverse=True) == liste:
-		return True
-	return False
+	return sorted(liste, reverse=True) == liste
 
 # Verifie si la liste est safe ou pas
 def is_level_safe(level):
-	difference_safe = {1, 2, 3}
 	if is_croissant(level) or is_decroissant(level):
 		for i, chiffre in enumerate(level):
 			
