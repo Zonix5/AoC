@@ -53,9 +53,6 @@ liste_part_2 = set()
 for pos in tqdm(liste_emplacement, desc="Test des positions"):
     liste_part_2.clear()
 
-    if (pos[0], pos[1]) == (origin_x, origin_y):
-        continue
-
     direction = "haut"
     pos_x, pos_y = origin_x, origin_y
     found_loop = False
@@ -82,6 +79,7 @@ for pos in tqdm(liste_emplacement, desc="Test des positions"):
     
     if found_loop:
         total += 1
+
 print(total+1) # + 1 car je ne sais pas pourquoi mais il manque 1
 
 
