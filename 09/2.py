@@ -1,7 +1,9 @@
 from time import perf_counter
 from tqdm import tqdm
+import re
 
-file_path = "input09.txt"
+pattern = r"'\.']\s*,\s*\['\.'"
+file_path = "input.txt"
 
 with open(file_path, "r") as fichier:
     contenu_fichier = list(fichier.read())
@@ -16,71 +18,70 @@ def etape_1():
             index += 1
         else:
             result.extend(["."] * int(chiffre))
-    print(1)
+
     return result
 
-def lier_point(nombres):
-    nombres_final = []
+def lier(liste):
+    result = []
+    index = 0
+    while index < len(liste):
+        petit_result = []
+        i = 0
+
+        while index+i  < len(liste) and liste[index] == liste[index+i]:
+            petit_result.append(liste[index+i])
+            i += 1
+        
+        result.append(petit_result)
+        index += i
+    return result
+        
+def point(nombres):
+    result = []
     for item in nombres:
-        nombres_final.append(item.rstrip("."))
-        nombres_final.append("."*item.count("."))
-
-    nombres_final = [item for item in nombres_final if "" != item]
-    # print(nombres_final)
-    nombres = nombres_final
-
-    for index in range(len(nombres)):
-        suivant = True
-        while suivant:
-            if index +1 > len(nombres)-1:
-                suivant = False
-                continue
-            if any(c in nombres[index+1] for c in nombres[index]):
-                item = nombres[index+1]
-                nombres.pop(index+1)
-                nombres[index] += item
-                
-            if index +1 <= len(nombres)-1:
-                suivant = any(c in nombres[index+1] for c in nombres[index])
-            else :
-                suivant = False
-
-    return nombres
-
-def premier_point(nombres):
-    return (item for item in nombres if "." in item)
-
+        if "." in item and item not in result:
+            result.append(item)
+    return result
 
 def etape_2():
-    nombres = lier_point(etape_1())
-    
+    nombres = lier(etape_1())
 
     liste_nombre = [item for item in reversed(nombres) if "." not in item]
     nombres_final = nombres.copy()
 
-    for nombre in tqdm(liste_nombre, desc="Etape 2"):
-        for point in premier_point(lier_point(nombres_final)):
-            nombres_final = lier_point(nombres_final)
-            if len(nombre) <= len(point) and nombres_final.index(nombre) > nombres_final.index(point):
-                nombres_none = [None]*len(nombres_final)
-                nombres_none[nombres_final.index(point)] = nombre + "."*(len(nombres_final[nombres_final.index(point)])-len(nombre))
-                nombres_none[nombres_final.index(nombre)] = "."*len(nombre)
-                for i in nombres_none:
-                    if i != None:
-                        nombres_final[nombres_none.index(i)]=i
-                break
+    for nombre in tqdm(liste_nombre, desc="Traitement en cours"):
+        longeur_nombre = len(nombre)
+        for points in point(nombres_final):
+            longeur_points = len(points)
+            if longeur_nombre > longeur_points or nombres_final.index(nombre) <= nombres_final.index(points):
+                continue
+            
+            nombres_final[nombres_final.index(nombre)] = ["."] * longeur_nombre
+            
+            nombres_final[nombres_final.index(points)] = nombre
+            
+            if longeur_nombre-longeur_points:
+                nombres_final.insert(nombres_final.index(nombre)+1, ["."] * (longeur_points-longeur_nombre))
+            
+            nombres_final = eval(re.sub(pattern, "'.', '.'", str(nombres_final)))
+            break
 
     return nombres_final
-
+    
 def etape_3():
-    nombres = "0099811188827773336446555566.............."
+    nombres = etape_2()
+    final = []
+    for i in nombres:
+        final.extend(i)
+
+    nombres = final
 
     total = 0
     index = 0
     for chiffre in nombres:
-        if "." not in chiffre:
+        if chiffre != ".":
             total += index*int(chiffre)
-            index += 1
+        index += 1
 
     return total
 
