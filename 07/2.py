@@ -15,9 +15,7 @@ def math_sans_priorite(liste_operation):
             operator = operations[i]
             if i+1 < len(operations):
                 if operator == "||":
-                    resultat = f"{resultat}"
-                    resultat += operations[i+1]
-                    resultat = eval(resultat)
+                    resultat = eval(f"{resultat}{operations[i+1]}")
                 elif operator == "+":
                     resultat += int(operations[i+1])
                 elif operator == "*":
