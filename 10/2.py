@@ -32,7 +32,7 @@ def verifier_prochains(start, queue=[]):
                 
             if int(input_liste[x_pro][y_pro]) != int(input_liste[start[0]][start[1]])+1:
                 continue
-            if (x_pro, y_pro) not in result and (x_pro, y_pro) not in queue:
+            if (x_pro, y_pro) not in result:
                 result.append((x_pro, y_pro))
     
     return result
@@ -45,7 +45,7 @@ def main():
         while queue:
             for item in queue:
                 queue.remove(item)
-                if input_liste[item[0]][item[1]] == "9" and item not in petit_total:
+                if input_liste[item[0]][item[1]] == "9":
                     petit_total.append(item)
                 else:
                     queue.extend(verifier_prochains(item, queue))

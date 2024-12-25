@@ -57,4 +57,4 @@ def etape_3():
 if __name__ == "__main__":
     start_time = perf_counter()
     print(etape_3())
-    #print(f"Temps d'exécution : {perf_counter() - start_time}")
+    print(f"Temps d'exécution : {perf_counter() - start_time}")
